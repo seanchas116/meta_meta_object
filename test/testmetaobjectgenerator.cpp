@@ -7,7 +7,7 @@
 #include <QJSEngine>
 #include <QSignalSpy>
 
-using namespace FQI;
+using namespace ForeignQObject;
 
 class SampleObject : public Object
 {

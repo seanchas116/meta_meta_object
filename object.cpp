@@ -1,7 +1,7 @@
 #include "object.h"
 #include "metaobject.h"
 
-namespace FQI {
+namespace ForeignQObject {
 
 Object::Object(const std::shared_ptr<MetaObject> &metaObject, QObject *parent) :
     QObject(parent),

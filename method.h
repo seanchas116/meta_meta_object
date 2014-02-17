@@ -3,7 +3,7 @@
 #include <QVariant>
 #include <functional>
 
-namespace FQI {
+namespace ForeignQObject {
 
 class Object;
 

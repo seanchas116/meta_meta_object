@@ -3,7 +3,7 @@
 #include <QVector>
 #include "method.h"
 
-namespace FQI {
+namespace ForeignQObject {
 
 class MetaObject : public QMetaObject
 {

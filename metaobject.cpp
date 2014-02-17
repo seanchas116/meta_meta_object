@@ -1,7 +1,7 @@
 #include "metaobject.h"
 #include "object.h"
 
-namespace FQI {
+namespace ForeignQObject {
 
 MetaObject::MetaObject(
     const QVector<uint8_t> &stringData, const QVector<uint> &data,

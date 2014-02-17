@@ -1,7 +1,7 @@
 #pragma once
 #include <QObject>
 
-namespace FQI {
+namespace ForeignQObject {
 
 class MetaObject;
 

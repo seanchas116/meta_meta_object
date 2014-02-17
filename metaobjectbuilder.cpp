@@ -3,7 +3,7 @@
 #include <QVector>
 #include <QQueue>
 
-namespace FQI {
+namespace ForeignQObject {
 
 namespace {
 

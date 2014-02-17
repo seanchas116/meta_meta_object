@@ -1,11 +1,6 @@
 #pragma once
 #include <QObject>
 
-namespace FQI
-{
-class MetaObject;
-}
-
 class QJSEngine;
 
 class TestMetaObjectGenerator : public QObject
