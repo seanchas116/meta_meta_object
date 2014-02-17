@@ -1,4 +1,4 @@
-#include "metaobjectgenerator.h"
+#include "metaobjectbuilder.h"
 #include "metaobject.h"
 #include <QVector>
 #include <QQueue>
@@ -53,7 +53,7 @@ enum MethodFlags  {
 
 }
 
-class MetaObjectGenerator::StringPool
+class MetaObjectBuilder::StringPool
 {
 public:
     int intern(const QByteArray &str) {
@@ -99,16 +99,16 @@ private:
     QList<QByteArray> mStrings;
 };
 
-MetaObjectGenerator::MetaObjectGenerator()
+MetaObjectBuilder::MetaObjectBuilder()
 {
 }
 
-void MetaObjectGenerator::setClassName(const QByteArray &className)
+void MetaObjectBuilder::setClassName(const QByteArray &className)
 {
     mClassName = className;
 }
 
-void MetaObjectGenerator::addSignal(const QByteArray &name, int arity)
+void MetaObjectBuilder::addSignal(const QByteArray &name, int arity)
 {
     Q_ASSERT(!name.isEmpty());
 
@@ -118,7 +118,7 @@ void MetaObjectGenerator::addSignal(const QByteArray &name, int arity)
     mSignals << method;
 }
 
-void MetaObjectGenerator::addMethod(const QByteArray &name, int arity, const Method &method, bool isSlot)
+void MetaObjectBuilder::addMethod(const QByteArray &name, int arity, const Method &method, bool isSlot)
 {
     Q_ASSERT(!name.isEmpty());
     Q_ASSERT(arity >= 0);
@@ -135,7 +135,7 @@ void MetaObjectGenerator::addMethod(const QByteArray &name, int arity, const Met
     }
 }
 
-void MetaObjectGenerator::addProperty(const QByteArray &name, const Method &getter, const Method &setter)
+void MetaObjectBuilder::addProperty(const QByteArray &name, const Method &getter, const Method &setter)
 {
     Q_ASSERT(!name.isEmpty());
     Q_ASSERT(getter);
@@ -149,7 +149,7 @@ void MetaObjectGenerator::addProperty(const QByteArray &name, const Method &gett
     mProperties << property;
 }
 
-std::shared_ptr<MetaObject> MetaObjectGenerator::create() const
+std::shared_ptr<MetaObject> MetaObjectBuilder::create() const
 {
     StringPool stringPool;
     auto metaData = writeMetaData(stringPool);
@@ -189,7 +189,7 @@ std::shared_ptr<MetaObject> MetaObjectGenerator::create() const
     return metaObject;
 }
 
-QVector<uint> MetaObjectGenerator::writeMetaData(StringPool &stringPool) const
+QVector<uint> MetaObjectBuilder::writeMetaData(StringPool &stringPool) const
 {
     int methodDataSize = 0;
 
@@ -307,7 +307,7 @@ QVector<uint> MetaObjectGenerator::writeMetaData(StringPool &stringPool) const
     return metaData;
 }
 
-int MetaObjectGenerator::notifySignalIndex(const PropertyDef &property) const
+int MetaObjectBuilder::notifySignalIndex(const PropertyDef &property) const
 {
     for (int i = 0; i < mSignals.size(); ++i) {
         if (mSignals[i].arity == 1 && mSignals[i].name == property.notifySignalName)

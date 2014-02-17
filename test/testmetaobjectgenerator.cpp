@@ -1,7 +1,7 @@
 #include "testmetaobjectgenerator.h"
 
 #include "../object.h"
-#include "../metaobjectgenerator.h"
+#include "../metaobjectbuilder.h"
 
 #include <QtTest>
 #include <QJSEngine>
@@ -27,7 +27,7 @@ TestMetaObjectGenerator::TestMetaObjectGenerator(QObject *parent) :
 
 void TestMetaObjectGenerator::initTestCase()
 {
-    MetaObjectGenerator generator;
+    MetaObjectBuilder generator;
 
     auto method = [](Object *object, const QVariantList &args) {
         return args[0].toString() + args[1].toString();

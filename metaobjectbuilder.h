@@ -8,11 +8,11 @@ namespace FQI {
 
 class Object;
 
-class MetaObjectGenerator
+class MetaObjectBuilder
 {
 public:
 
-    MetaObjectGenerator();
+    MetaObjectBuilder();
 
     void setClassName(const QByteArray &className);
     void addSignal(const QByteArray &name, int arity);

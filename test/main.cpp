@@ -1,5 +1,3 @@
-#include "../metaobjectgenerator.h"
-#include "../metaobject.h"
 #include "testmetaobjectgenerator.h"
 
 #include <QCoreApplication>

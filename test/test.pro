@@ -15,16 +15,16 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     ../metaobject.cpp \
-    ../metaobjectgenerator.cpp \
     ../object.cpp \
-	testmetaobjectgenerator.cpp
+	testmetaobjectgenerator.cpp \
+    ../metaobjectbuilder.cpp
 
 HEADERS += \
     ../metaobject.h \
     ../method.h \
-    ../metaobjectgenerator.h \
     ../object.h \
-	testmetaobjectgenerator.h
+	testmetaobjectgenerator.h \
+    ../metaobjectbuilder.h
 
 OTHER_FILES += \
     testmetaobjectgenerator.qml
