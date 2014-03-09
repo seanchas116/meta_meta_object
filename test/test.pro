@@ -12,21 +12,20 @@ CONFIG += c++11
 
 TEMPLATE = app
 
-SOURCES += main.cpp \
+SOURCES += \
     ../metaobject.cpp \
     ../object.cpp \
 	testmetaobjectgenerator.cpp \
-    ../metaobjectbuilder.cpp
+    ../metaobjectbuilder.cpp \
+    test.cpp
 
 HEADERS += \
     ../metaobject.h \
     ../method.h \
     ../object.h \
-	testmetaobjectgenerator.h \
-    ../metaobjectbuilder.h
+    ../metaobjectbuilder.h \
+    test.h
 
-OTHER_FILES += \
-    testmetaobjectgenerator.qml
+OTHER_FILES +=
 
-RESOURCES += \
-    files.qrc
+RESOURCES +=
