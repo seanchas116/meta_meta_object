@@ -6,12 +6,11 @@
 
 QT       += core gui qml quick testlib
 
-TARGET = foreign-qobject-test
+TARGET = meta_meta_object-test
 CONFIG   -= app_bundle
 CONFIG += c++11
 
 TEMPLATE = app
-
 
 SOURCES += main.cpp \
     ../metaobject.cpp \

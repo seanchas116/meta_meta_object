@@ -3,7 +3,7 @@
 #include <QVariant>
 #include <functional>
 
-namespace ForeignQObject {
+namespace MetaMetaObject {
 
 class Object;
 

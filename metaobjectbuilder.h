@@ -4,7 +4,7 @@
 #include <QMetaMethod>
 #include "metaobject.h"
 
-namespace ForeignQObject {
+namespace MetaMetaObject {
 
 class Object;
 

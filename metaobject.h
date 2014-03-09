@@ -3,7 +3,7 @@
 #include <QVector>
 #include "method.h"
 
-namespace ForeignQObject {
+namespace MetaMetaObject {
 
 class MetaObject : public QMetaObject
 {
