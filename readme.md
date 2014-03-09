@@ -1,11 +1,5 @@
-
-ForeignQObject
+meta_meta_object
 ========
 
-ForeignQObject is a Qt library for creating QMetaObject dynamically and exposing arbitrary objects to Qt meta-object system.
-
-Usage
---------
-
-
+meta_meta_object is a Qt library for constructing QMetaObject dynamically and exposing arbitrary objects to Qt meta-object system.
 
