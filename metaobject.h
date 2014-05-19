@@ -1,40 +1,41 @@
 #pragma once
 #include <QMetaObject>
 #include <QVector>
-#include "method.h"
+#include <QHash>
+#include "common.h"
 
 namespace MetaMetaObject {
+
+class ForeignClass;
+class Object;
 
 class MetaObject : public QMetaObject
 {
 public:
-
-    struct MethodInfo
-    {
-        Method method;
-        int arity = 0;
-        bool isSignal = false;
-    };
-
-    struct PropertyInfo
-    {
-        Method getter;
-        Method setter;
-        int notifySignalId = -1;
-    };
-
-    MetaObject(
-        const QVector<uint8_t> &stringData, const QVector<uint> &data,
-        const QVector<MethodInfo> &methodInfos, const QVector<PropertyInfo> &propertyInfos);
+    MetaObject(const SP<ForeignClass> &foreignClass);
 
     int dynamicMetaCall(Object *obj, QMetaObject::Call call, int index, void **argv);
+    QHash<std::size_t, int> signalIndexHash() const { return mSignalIndexHash; }
 
 private:
+    class StringPool;
+
+    void buildData();
+    QVector<uint> writeMetaData(StringPool &stringPool);
 
     QVector<uint8_t> mStringData;
     QVector<uint> mData;
-    QVector<MethodInfo> mMethods;
-    QVector<PropertyInfo> mProperties;
+
+    WP<ForeignClass> mForeignClassWP;
+    SP<MetaObject> mSuperMetaObject;
+
+    QHash<std::size_t, int> mSignalIndexHash;
+
+    QList<std::size_t> mMethodIds;
+    QList<int> mMethodArities;
+    int mSignalCount;
+
+    QList<std::size_t> mPropertyIds;
 };
 
 } // namespace ForeignQObject

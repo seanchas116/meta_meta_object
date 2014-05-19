@@ -1,22 +1,23 @@
 #include "object.h"
 #include "metaobject.h"
+#include "foreignclass.h"
 
 namespace MetaMetaObject {
 
-Object::Object(const std::shared_ptr<MetaObject> &metaObject, QObject *parent) :
+Object::Object(const SP<ForeignClass> &klass, QObject *parent) :
     QObject(parent),
-    mMetaObject(metaObject)
+    mForeignClass(klass)
 {
 }
 
 const QMetaObject *Object::metaObject() const
 {
-    return mMetaObject.get();
+    return mForeignClass->metaObject().get();
 }
 
 int Object::qt_metacall(QMetaObject::Call call, int index, void **argv)
 {
-    return mMetaObject->dynamicMetaCall(this, call, index, argv);
+    return mForeignClass->metaObject()->dynamicMetaCall(this, call, index, argv);
 }
 
 } // namespace FQI

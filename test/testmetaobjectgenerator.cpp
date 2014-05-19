@@ -1,5 +1,6 @@
 #include "../object.h"
-#include "../metaobjectbuilder.h"
+#include "../foreignclass.h"
+#include "../metaobject.h"
 #include "test.h"
 
 #include <QtTest>
@@ -11,12 +12,72 @@ using namespace MetaMetaObject;
 class SampleObject : public Object
 {
 public:
-    SampleObject(const std::shared_ptr<MetaObject> &metaObject, QObject *parent) :
-        Object(metaObject, parent)
+    SampleObject(const SP<ForeignClass> &klass, QObject *parent) :
+        Object(klass, parent)
     {}
 
     QString name;
 };
+
+class SampleClass : public ForeignClass
+{
+public:
+
+    struct Id
+    {
+        enum Ids
+        {
+            method, method2, name, nameChanged
+        };
+    };
+
+    SampleClass()
+    {
+        setClassName("SampleObject");
+        addMethod("method", Id::method, 2);
+        addMethod("method2", Id::method2, 2);
+        addProperty("name", Id::name, Property::Flag::Writable | Property::Flag::Readable, true, Id::nameChanged);
+        addSignal("nameChanged", Id::nameChanged, 1);
+    }
+
+    QVariant callMethod(Object *obj, size_t id, const QVariantList &args) override
+    {
+        qDebug() << id << args;
+        switch (id) {
+        case Id::method:
+            return args[0].toString() + args[1].toString();
+        case Id::method2:
+            return args[0].toInt() * args[1].toInt();
+        default:
+            return QVariant();
+        }
+    }
+    QVariant getProperty(Object *obj, size_t id) override
+    {
+        switch (id) {
+        case Id::name:
+            return static_cast<SampleObject *>(obj)->name;
+        default:
+            return QVariant();
+        }
+    }
+    void setProperty(Object *obj, size_t id, const QVariant &value) override
+    {
+        switch (id) {
+        case Id::name: {
+            auto sampleobj = static_cast<SampleObject *>(obj);
+            if (sampleobj->name != value.toString()) {
+                sampleobj->name = value.toString();
+                emitSignal(obj, Id::nameChanged, {value});
+            }
+            break;
+        }
+        default:
+            break;
+        }
+    }
+};
+
 
 class TestMetaObjectGenerator : public QObject
 {
@@ -26,48 +87,22 @@ private slots:
 
     void initTestCase()
     {
-        MetaObjectBuilder generator;
+        auto klass = makeSP<SampleClass>();
 
-        auto method = [](Object *object, const QVariantList &args) {
-            return args[0].toString() + args[1].toString();
-        };
-        auto method2 = [](Object *object, const QVariantList &args) {
-            return args[0].toInt() * args[1].toInt();
-        };
-        auto setter = [](Object *object, const QVariantList &args) {
-            auto sampleObject = static_cast<SampleObject *>(object);
-            auto str = args[0].toString();
-            if (sampleObject->name != str) {
-                sampleObject->name = str;
-                auto propertyIndex = sampleObject->metaObject()->indexOfProperty("name");
-                auto property = sampleObject->metaObject()->property(propertyIndex);
-                property.notifySignal().invoke(sampleObject, Q_ARG(QVariant, str));
-            }
-            return QVariant();
-        };
-        auto getter = [](Object *object, const QVariantList &args) {
-            return static_cast<SampleObject *>(object)->name;
-        };
-
-        generator.setClassName("SampleObject");
-        generator.addMethod("method", 2, method);
-        generator.addProperty("name", getter, setter);
-        generator.addMethod("method2", 2, method2, true);
-
-        auto metaObject = generator.create();
-
-        mSampleObject = new SampleObject(metaObject, this);
+        mSampleObject = new SampleObject(klass, this);
 
         mJsEngine = new QJSEngine(this);
         auto objectValue = mJsEngine->newQObject(mSampleObject);
         mJsEngine->globalObject().setProperty("sample", objectValue);
 
-        for (int i = 0; i < metaObject->methodCount(); ++i) {
-            qDebug() << metaObject->method(i).methodSignature();
+        auto metaobj = klass->metaObject();
+
+        for (int i = 0; i < metaobj->methodCount(); ++i) {
+            qDebug() << metaobj->method(i).methodSignature();
         }
 
-        for (int i = 0; i < metaObject->propertyCount(); ++i) {
-            qDebug() << metaObject->property(i).name() << metaObject->property(i).typeName();
+        for (int i = 0; i < metaobj->propertyCount(); ++i) {
+            qDebug() << metaobj->property(i).name() << metaobj->property(i).typeName();
         }
     }
 
@@ -98,7 +133,8 @@ private slots:
     {
         QSignalSpy spy(mSampleObject, SIGNAL(nameChanged(QVariant)));
         mSampleObject->setProperty("name", "foobar");
-        QCOMPARE(spy.takeFirst().at(0).toString(), QString("foobar"));
+        QCOMPARE(spy.size(), 1);
+        QCOMPARE(spy.takeFirst(), QVariantList {QString("foobar") });
     }
 
 private:

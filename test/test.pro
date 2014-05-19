@@ -16,15 +16,15 @@ SOURCES += \
     ../metaobject.cpp \
     ../object.cpp \
 	testmetaobjectgenerator.cpp \
-    ../metaobjectbuilder.cpp \
+    ../foreignclass.cpp \
     test.cpp
 
 HEADERS += \
     ../metaobject.h \
-    ../method.h \
     ../object.h \
-    ../metaobjectbuilder.h \
-    test.h
+    ../foreignclass.h \
+    test.h \
+    ../common.h
 
 OTHER_FILES +=
 
