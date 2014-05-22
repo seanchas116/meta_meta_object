@@ -66,6 +66,28 @@ void ForeignClass::emitSignal(Object *obj, std::size_t id, const QVariantList &a
                       Q_ARG(QVariant, argsToPass[9]));
 }
 
+QVariant ForeignClass::callMethod(Object *obj, size_t id, const QVariantList &args)
+{
+    Q_UNUSED(obj);
+    Q_UNUSED(id);
+    Q_UNUSED(args);
+    return QVariant();
+}
+
+void ForeignClass::setProperty(Object *obj, size_t id, const QVariant &value)
+{
+    Q_UNUSED(obj);
+    Q_UNUSED(id);
+    Q_UNUSED(value);
+}
+
+QVariant ForeignClass::getProperty(Object *obj, size_t id)
+{
+    Q_UNUSED(obj);
+    Q_UNUSED(id);
+    return QVariant();
+}
+
 void ForeignClass::addMethod(const QByteArray &name, std::size_t id, int arity, Method::Access access, Method::Type type)
 {
     if (mMetaObject) {

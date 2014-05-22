@@ -69,9 +69,9 @@ public:
 
     void emitSignal(Object *obj, std::size_t id, const QVariantList &args);
 
-    virtual QVariant callMethod(Object *obj, size_t id, const QVariantList &args) = 0;
-    virtual void setProperty(Object *obj, size_t id, const QVariant &value) = 0;
-    virtual QVariant getProperty(Object *obj, size_t id) = 0;
+    virtual QVariant callMethod(Object *obj, size_t id, const QVariantList &args);
+    virtual void setProperty(Object *obj, size_t id, const QVariant &value);
+    virtual QVariant getProperty(Object *obj, size_t id);
 
 protected:
 
