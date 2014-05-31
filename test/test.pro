@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui qml quick testlib
+QT       += core gui qml quick testlib core-private
 
 TARGET = meta_meta_object-test
 CONFIG   -= app_bundle
